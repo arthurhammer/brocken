@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+// Converts a directory of Strava activity JSON files into a single GeoJSON file.
+const fs = require("fs");
+const path = require("path");
+const turf = require("@turf/turf");
+const polyline = require("@mapbox/polyline");
+const argv = process.argv.slice(2);
+
+function activityToFeature(activity) {
+    const encodedPolyline = activity.map.polyline;
+    const geometry = encodedPolyline ? polyline.toGeoJSON(encodedPolyline) : null;
+    const feature = turf.feature(geometry);
+    feature.properties = propertiesFromActivity(activity);
+    return feature;
+}
+
+function propertiesFromActivity(activity) {
+    return {
+        id: activity.id,
+        date: activity.start_date,  // todo: timezone/start_date_local/utc_offset
+        name: activity.name,
+        type: activity.type,
+        distance: activity.distance,
+        movingTime: activity.moving_time,
+        elevationGain: activity.total_elevation_gain
+    };
+}
+
+if (argv.length != 1) {
+    console.error("Usage: <input directory>");
+    process.exit(1);
+}
+
+const inputDir = argv[0];
+
+const features = fs.readdirSync(inputDir)
+    .filter(filename => path.extname(filename) === ".json")
+    .map(filename => fs.readFileSync(path.join(inputDir, filename)))
+    .map(JSON.parse)
+    .map(activityToFeature);
+
+const geojson = turf.featureCollection(features);
+console.log(JSON.stringify(geojson));

@@ -1,0 +1,65 @@
+#!/usr/bin/env node
+// Downloads all Strava activities as JSON to a directory.
+const fs = require("fs");
+const writeFile = require("util").promisify(fs.writeFile);
+const path = require("path");
+const mkdirp = require("mkdirp");
+const { forEachLimit } = require("async");  
+const strava = require("../src/strava");
+const argv = process.argv.slice(2);
+
+function filePath(activityId) {
+    return path.join(outputDir, `${activityId}.json`);
+}
+
+async function fetchRemainingActivityIds() {
+    console.log("Fetching activities...");
+
+    const ids = await strava.getAllActivityIds(token);
+    
+    console.log(`Found ${ids.length} total activities.`);
+
+    return ids.filter(id => !fs.existsSync(filePath(id))); 
+}
+
+function downloadActivities(ids, simultaneousRequests, callback) {
+    console.log("Remaining to download:", ids.length);
+
+    forEachLimit(ids, simultaneousRequests, downloadActivity, callback);
+}
+
+async function downloadActivity(id) {
+    console.log("Downloading activity", id);
+
+    const activity = await strava.getDetailActivity(token, id);
+    const path = filePath(id);
+    const json = JSON.stringify(activity);
+
+    return writeFile(path, json);
+}
+
+async function exportActivities() {
+    mkdirp.sync(outputDir);
+    
+    const ids = await fetchRemainingActivityIds();
+    const simultaneousRequests = 10;
+
+    downloadActivities(ids, simultaneousRequests, err => {
+        if (err) throw err;
+    });
+}
+
+if (argv.length != 2) {
+    console.error("Usage: strava-export <access-token> <output-directory>");
+    process.exit(1);
+} 
+
+const token = argv[0]; 
+const outputDir = argv[1];
+
+// (Top-level async function cannot be handled with try-catch (as that's synchronous),
+// only with Promise-style catch)
+exportActivities().catch(err => {
+    console.error(err);
+    process.exit(1);
+});

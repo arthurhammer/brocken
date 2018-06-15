@@ -1,0 +1,19 @@
+{
+  "name": "brocken",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "start": "node index.js data/activities.geojson",
+    "strava": "npm run strava:download && npm run strava:togeojson",
+    "strava:download": "script/strava-download \"$(cat _private/stravatoken)\" data/strava",
+    "strava:togeojson": "script/strava-togeojson data/strava > data/activities.geojson"
+  },
+  "devDependencies": {
+    "@mapbox/polyline": "^1.0.0",
+    "@turf/turf": "^5.1.6",
+    "async": "^2.6.1",
+    "got": "^8.3.1",
+    "mkdirp": "^0.5.1"
+  },
+  "dependencies": {}
+}
