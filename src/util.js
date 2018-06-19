@@ -24,27 +24,27 @@ function endsIn(lineStringFeature, polygonFeature) {
 function pointToPolygonDistance(coordinate, polygonFeature) {
     const polygonLines = turf.lineSegment(polygonFeature).features;
     const distances = polygonLines.map(line => turf.pointToLineDistance(coordinate, line));
-    
+
     return Math.min(...distances);
 }
 
 /**
  * See also: `turf.booleanPointInPolygon`. However, it has no option to specify
- * a tolerance. There are instances where line segments from `turf.lineSplit(line, polygon)` 
+ * a tolerance. There are instances where line segments from `turf.lineSplit(line, polygon)`
  * return `false` for `turf.booleanPointInPolygon(segment.start/end, polygon`).
  */
-function isCoordinateOnPolygonBoundary(coordinate, polygonFeature, tolerance) {  
+function isCoordinateOnPolygonBoundary(coordinate, polygonFeature, tolerance) {
     return pointToPolygonDistance(coordinate, polygonFeature) <= tolerance;
 }
 
 /**
  * Returns `true` if the line without start and end coordinates is fully within the polygon.
  * In case of a line with only two coordinates, checks the full line for inclusion.
- * 
+ *
  * Precondition: The line is split by the polygon (`turf.lineSplit`).
- * 
+ *
  * This is a simple heuristic to work around imprecisions in `turf.booleanWithin(line, polygon)`
- * where it can return `false` for an inner line split by the polygon because the start/end 
+ * where it can return `false` for an inner line split by the polygon because the start/end
  * coordinates slightly cross the polygon boundary (due to `turf.lineSplit` imprecisions).
  */
 function isInnerSegmentWithin(lineStringFeature, polygonFeature) {
@@ -80,7 +80,7 @@ function summarizeActivityTypes(activityFeatures) {
 }
 
 module.exports = {
-    sum, 
+    sum,
     start,
     end,
     startsIn,

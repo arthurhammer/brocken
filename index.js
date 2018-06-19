@@ -29,7 +29,7 @@ function info(results) {
         r => r.segments.some(s => s.isInvalidLoop)
     );
 
-    const brockenActivities = [...validSummitActivities, ...activitiesStartingOnBrocken, ...activitiesFullyWithinBrocken];  
+    const brockenActivities = [...validSummitActivities, ...activitiesStartingOnBrocken, ...activitiesFullyWithinBrocken];
 
     console.log("\n---\n");
     console.log("Total activities:", results.length);
@@ -48,7 +48,7 @@ function info(results) {
     console.log("", summarize(activitiesStartingOnBrocken), "\n");
     console.log("Activities fully enclosed by Brocken:", activitiesFullyWithinBrocken.length);
     console.log("", summarize(activitiesFullyWithinBrocken), "\n");
- 
+
     // Assumes corresponding feature property exists
     const distances = validSummitActivities.map(r => r.activity.properties.distance);
     const elevationGain = validSummitActivities.map(r => r.activity.properties.elevationGain);
@@ -68,8 +68,8 @@ const activityFeatures = JSON.parse(fs.readFileSync(activitiesPath)).features;
 
 const results = summits.analyzeActivities(activityFeatures, {
     summit: turf.circle(brocken, 0.35),  // values in km
-    multiSummitBoundary: turf.circle(brocken, 3),  
-    boundaryTolerance: 0.00001 
+    multiSummitBoundary: turf.circle(brocken, 3),
+    boundaryTolerance: 0.00001
 });
 
 info(results);

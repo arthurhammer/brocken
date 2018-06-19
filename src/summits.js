@@ -12,47 +12,47 @@ function analyzeActivity(activityFeature, options) {
     const endsOnSummit = isEmpty ? false : util.endsIn(activityFeature, summit);
     const startsOnSummit = isEmpty ? false : util.startsIn(activityFeature, summit);
     const fullyWithinSummit = isEmpty ? false : turf.booleanWithin(activityFeature, summit);
-    
-    const segments = isEmpty 
-        ? [] 
+
+    const segments = isEmpty
+        ? []
         : turf.lineSplit(activityFeature, summit).features.map(s => analyzeSegment(s, options));
 
     const summits = util.sum(segments, s => s.isValidSummit ? 1 : 0);
-    
-    return { 
-        activity: activityFeature, 
-        segments, 
-        summits, 
-        isEmpty, 
-        endsOnSummit, 
-        startsOnSummit, 
-        fullyWithinSummit 
+
+    return {
+        activity: activityFeature,
+        segments,
+        summits,
+        isEmpty,
+        endsOnSummit,
+        startsOnSummit,
+        fullyWithinSummit
     };
 }
 
 /**
- * Precondition: The line is split by the polygon (`turf.lineSplit`). 
+ * Precondition: The line is split by the polygon (`turf.lineSplit`).
  */
 function analyzeSegment(lineStringFeature, options) {
     const type = segmentType(lineStringFeature, options.summit, options.boundaryTolerance);
     const isValidLoop = (type === "loop") && !turf.booleanWithin(lineStringFeature, options.multiSummitBoundary);
     const isInvalidLoop = (type === "loop") && !isValidLoop;
-    const isValidSummit = (type === "start") || isValidLoop; 
+    const isValidSummit = (type === "start") || isValidLoop;
 
-    return { 
+    return {
         segment: lineStringFeature,
         type,
-        isValidLoop, 
+        isValidLoop,
         isInvalidLoop,
-        isValidSummit 
+        isValidSummit
     };
 }
 
 /**
- * Precondition: The line is split by the polygon (`turf.lineSplit`). 
+ * Precondition: The line is split by the polygon (`turf.lineSplit`).
  */
 function segmentType(lineStringFeature, polygonFeature, tolerance) {
-    const isWithin = util.isInnerSegmentWithin(lineStringFeature, polygonFeature); 
+    const isWithin = util.isInnerSegmentWithin(lineStringFeature, polygonFeature);
     const isStartOnBoundary = util.isCoordinateOnPolygonBoundary(util.start(lineStringFeature), polygonFeature, tolerance);
     const isEndOnBoundary = util.isCoordinateOnPolygonBoundary(util.end(lineStringFeature), polygonFeature, tolerance);
 
