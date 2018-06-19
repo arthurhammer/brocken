@@ -46,8 +46,8 @@ function segmentType(lineStringFeature, polygonFeature, tolerance) {
     const isEndOnBoundary = isCoordinateOnPolygonBoundary(end(lineStringFeature), polygonFeature, tolerance);
 
     // (Since the lines are split by the polygon no intersections are implied.)
-    if (!isWithin && !isStartOnBoundary && isEndOnBoundary) return "ascent";
-    if (!isWithin && isStartOnBoundary && !isEndOnBoundary) return "descent";
+    if (!isWithin && !isStartOnBoundary && isEndOnBoundary) return "start";
+    if (!isWithin && isStartOnBoundary && !isEndOnBoundary) return "end";
     if (!isWithin && isStartOnBoundary && isEndOnBoundary) return "loop";
     if (isWithin && isStartOnBoundary && isEndOnBoundary) return "inner";
 

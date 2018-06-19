@@ -5,21 +5,21 @@ const argv = process.argv.slice(2);
 
 function info(results) {
     // --- Main ---
-    const ascents = util.sum(results, r => r.ascents);
-    const activitiesWithValidAscents = results.filter(r => r.ascents > 0);
-    const maxAscentsInAnActivity = Math.max(...results.map(r => r.ascents));
+    const summits = util.sum(results, r => r.summits);
+    const activitiesWithValidSummits = results.filter(r => r.summits > 0);
+    const maxSummitsInAnActivity = Math.max(...results.map(r => r.summits));
 
-    console.log(`${ascents} valid ascents in ${activitiesWithValidAscents.length} activities`);
-    console.log("Maximum number of ascents in a single activity:", maxAscentsInAnActivity);
+    console.log(`${summits} valid summits in ${activitiesWithValidSummits.length} activities`);
+    console.log("Maximum number of summits in a single activity:", maxSummitsInAnActivity);
 
-    // --- Debug ---
+    // --- Info ---
     const emptyActivities = results.filter(r => r.isEmpty);
-    const brockenActivities = results.filter(r => (r.ascents > 0) || (r.startsOnBrocken));  
+    const brockenActivities = results.filter(r => (r.summits > 0) || (r.startsOnBrocken));  
     const activitiesEndingOnBrocken = results.filter(r => r.endsOnBrocken);
     const activitiesStartingOnBrocken = results.filter(r => r.startsOnBrocken);
     const activitiesFullyWithinBrocken = results.filter(r => r.fullyWithinBrocken);
-    const activitiesWithMultipleAscents = results.filter(r => r.ascents > 1);
-    const activitiesWithInvalidMultipleAscents = results.filter(
+    const activitiesWithMultipleSummits = results.filter(r => r.summits > 1);
+    const activitiesWithInvalidMultipleSummits = results.filter(
         r => r.segments.some(s => s.isInvalidLoop)
     );
 
@@ -33,10 +33,10 @@ function info(results) {
     console.log("", summarize(emptyActivities), "\n");
     console.log("Activities intersecting Brocken (at least once):", brockenActivities.length);
     console.log("", summarize(brockenActivities), "\n");
-    console.log("Activities with (valid) multiple ascents:", activitiesWithMultipleAscents.length);
-    console.log("", summarize(activitiesWithMultipleAscents), "\n");
-    console.log("Activities with invalid multiple ascents:", activitiesWithInvalidMultipleAscents.length);
-    console.log("", summarize(activitiesWithInvalidMultipleAscents), "\n");
+    console.log("Activities with (valid) multiple summits:", activitiesWithMultipleSummits.length);
+    console.log("", summarize(activitiesWithMultipleSummits), "\n");
+    console.log("Activities with invalid multiple summits:", activitiesWithInvalidMultipleSummits.length);
+    console.log("", summarize(activitiesWithInvalidMultipleSummits), "\n");
     console.log("Activities ending on Brocken:", activitiesEndingOnBrocken.length);
     console.log("", summarize(activitiesEndingOnBrocken), "\n");
     console.log("Activities starting on Brocken:", activitiesStartingOnBrocken.length);
