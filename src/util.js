@@ -38,23 +38,6 @@ function isCoordinateOnPolygonBoundary(coordinate, polygonFeature, tolerance) {
 }
 
 /**
- * Precondition: The line is split by the polygon (`turf.lineSplit`). 
- */
-function segmentType(lineStringFeature, polygonFeature, tolerance) {
-    const isWithin = isInnerSegmentWithin(lineStringFeature, polygonFeature); 
-    const isStartOnBoundary = isCoordinateOnPolygonBoundary(start(lineStringFeature), polygonFeature, tolerance);
-    const isEndOnBoundary = isCoordinateOnPolygonBoundary(end(lineStringFeature), polygonFeature, tolerance);
-
-    // (Since the lines are split by the polygon no intersections are implied.)
-    if (!isWithin && !isStartOnBoundary && isEndOnBoundary) return "start";
-    if (!isWithin && isStartOnBoundary && !isEndOnBoundary) return "end";
-    if (!isWithin && isStartOnBoundary && isEndOnBoundary) return "loop";
-    if (isWithin && isStartOnBoundary && isEndOnBoundary) return "inner";
-
-    return null;
-}
-
-/**
  * Returns `true` if the line without start and end coordinates is fully within the polygon.
  * In case of a line with only two coordinates, checks the full line for inclusion.
  * 
@@ -104,7 +87,6 @@ module.exports = {
     endsIn,
     pointToPolygonDistance,
     isCoordinateOnPolygonBoundary,
-    segmentType,
     isInnerSegmentWithin,
     activityTypes,
     summarizeActivityTypes

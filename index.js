@@ -1,30 +1,35 @@
 const fs = require("fs");
-const brocken = require("./src/brocken");
+const turf = require("@turf/turf");
+const summits = require("./src/summits");
 const util = require("./src/util");
 const argv = process.argv.slice(2);
 
+function summarize(results) {
+    return util.summarizeActivityTypes(results.map(r => r.activity));
+}
+
 function info(results) {
     // --- Main ---
-    const summits = util.sum(results, r => r.summits);
-    const activitiesWithValidSummits = results.filter(r => r.summits > 0);
+    const totalSummits = util.sum(results, r => r.summits);
+    const validSummitActivities = results.filter(r => r.summits > 0);
     const maxSummitsInAnActivity = Math.max(...results.map(r => r.summits));
 
-    console.log(`${summits} valid summits in ${activitiesWithValidSummits.length} activities`);
+    console.log("Total valid summits:", totalSummits);
+    console.log("Activities with valid summits:", validSummitActivities.length);
+    console.log("", summarize(validSummitActivities), "\n");
     console.log("Maximum number of summits in a single activity:", maxSummitsInAnActivity);
 
     // --- Info ---
     const emptyActivities = results.filter(r => r.isEmpty);
-    const brockenActivities = results.filter(r => (r.summits > 0) || (r.startsOnBrocken));  
-    const activitiesEndingOnBrocken = results.filter(r => r.endsOnBrocken);
-    const activitiesStartingOnBrocken = results.filter(r => r.startsOnBrocken);
-    const activitiesFullyWithinBrocken = results.filter(r => r.fullyWithinBrocken);
+    const activitiesEndingOnBrocken = results.filter(r => r.endsOnSummit);
+    const activitiesStartingOnBrocken = results.filter(r => r.startsOnSummit);
+    const activitiesFullyWithinBrocken = results.filter(r => r.fullyWithinSummit);
     const activitiesWithMultipleSummits = results.filter(r => r.summits > 1);
     const activitiesWithInvalidMultipleSummits = results.filter(
         r => r.segments.some(s => s.isInvalidLoop)
     );
 
-    const resultActivities = results => results.map(r => r.activity);
-    const summarize = results => util.summarizeActivityTypes(resultActivities(results));
+    const brockenActivities = [...validSummitActivities, ...activitiesStartingOnBrocken, ...activitiesFullyWithinBrocken];  
 
     console.log("\n---\n");
     console.log("Total activities:", results.length);
@@ -46,12 +51,19 @@ function info(results) {
 }
 
 if (argv.length != 1) {
-    console.error("Usage: index.js <geojson-file>");
+    console.error("Usage: index.js <activities-geojson-file>");
     process.exit(1);
 }
 
+const brocken = [10.615571, 51.799141];
+
 const activitiesPath = argv[0];
 const activityFeatures = JSON.parse(fs.readFileSync(activitiesPath)).features;
-const results = brocken.analyzeActivities(activityFeatures);
+
+const results = summits.analyzeActivities(activityFeatures, {
+    summit: turf.circle(brocken, 0.35),  // values in km
+    multiSummitBoundary: turf.circle(brocken, 3),  
+    boundaryTolerance: 0.00001 
+});
 
 info(results);

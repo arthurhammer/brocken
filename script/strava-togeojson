@@ -17,7 +17,7 @@ function activityToFeature(activity) {
 function propertiesFromActivity(activity) {
     return {
         id: activity.id,
-        date: activity.start_date,  // todo: timezone/start_date_local/utc_offset
+        date: activity.start_date, 
         name: activity.name,
         type: activity.type,
         distance: activity.distance,
