@@ -64,9 +64,9 @@ if (argv.length != 1) {
 const brocken = [10.615571, 51.799141];
 
 const activitiesPath = argv[0];
-const activityFeatures = JSON.parse(fs.readFileSync(activitiesPath)).features;
+const activities = JSON.parse(fs.readFileSync(activitiesPath));
 
-const results = summits.analyzeActivities(activityFeatures, {
+const results = summits.analyzeActivities(activities, {
     summit: turf.circle(brocken, 0.35),  // values in km
     multiSummitBoundary: turf.circle(brocken, 3),
     boundaryTolerance: 0.00001
