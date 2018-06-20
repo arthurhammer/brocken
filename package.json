@@ -5,7 +5,7 @@
     "start": "npm run strava && npm run analyze",
     "analyze": "node index.js data/activities.geojson",
     "strava": "npm run strava:download && npm run strava:togeojson",
-    "strava:download": "script/strava-download \"$(cat _private/stravatoken)\" data/strava",
+    "strava:download": "script/strava-download \"$(cat stravatoken)\" data/strava",
     "strava:togeojson": "script/strava-togeojson data/strava > data/activities.geojson"
   },
   "devDependencies": {

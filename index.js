@@ -49,7 +49,7 @@ function info(results) {
     console.log("Activities fully enclosed by Brocken:", activitiesFullyWithinBrocken.length);
     console.log("", summarize(activitiesFullyWithinBrocken), "\n");
 
-    // Assumes corresponding feature property exists
+    // Assumes corresponding feature properties exist
     const distances = validSummitActivities.map(r => r.activity.properties.distance);
     const elevationGain = validSummitActivities.map(r => r.activity.properties.elevationGain);
     console.log("Distance (min, max, mean, in m) ", Math.min(...distances), Math.max(...distances), util.sum(distances)/distances.length);

@@ -56,7 +56,6 @@ function segmentType(lineStringFeature, polygonFeature, tolerance) {
     const isStartOnBoundary = util.isCoordinateOnPolygonBoundary(util.start(lineStringFeature), polygonFeature, tolerance);
     const isEndOnBoundary = util.isCoordinateOnPolygonBoundary(util.end(lineStringFeature), polygonFeature, tolerance);
 
-    // (Since the lines are split by the polygon no intersections are implied.)
     if (!isWithin && !isStartOnBoundary && isEndOnBoundary) return "start";
     if (!isWithin && isStartOnBoundary && !isEndOnBoundary) return "end";
     if (!isWithin && isStartOnBoundary && isEndOnBoundary) return "loop";
