@@ -25,7 +25,7 @@ Special consideration is given to:
 
 (June 2018)
 
-## Build/Run
+## Usage
 
 You need `node` with `npm`.
 
@@ -33,21 +33,25 @@ You need `node` with `npm`.
 
     npm install
 
-**Download Strava activities and build GeoJSON file**
-
-    npm run strava
-
-**Find summits in GeoJSON file**:
-
-    npm run analyze
-
-**Both**:
+**Download from Strava and analyze**:
 
     npm start
 
+**Only download**:
+
+    npm run strava
+
+**Only analyze**:
+
+    npm run analyze
+
+**Analyze included example file**:
+
+    npm run examples
+
 ## Strava Setup
 
-The repo itself does not come with any input data. There is a script to download all your Strava activities. Alternatively, you can skip Strava and supply any other GeoJSON file containing a collection of line strings.
+ There is a script to download all your Strava activities. Alternatively, you can skip Strava and supply any other GeoJSON file containing a collection of line strings, e.g. the included `data/examples.geojson`.
 
 ### Token
 

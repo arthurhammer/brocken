@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "start": "npm run strava && npm run analyze",
+    "examples": "node index.js data/examples.geojson",
     "analyze": "node index.js data/activities.geojson",
     "strava": "npm run strava:download && npm run strava:togeojson",
     "strava:download": "script/strava-download \"$(cat stravatoken)\" data/strava",
