@@ -1,6 +1,6 @@
 # brocken
 
-A quick experiment to figure out how many times I've summited [a small local mountain](https://en.wikipedia.org/wiki/Brocken) given my [Strava](https://strava.com) activities. [More details here](https://arthurhammer.de/2018/06/counting-mountain-summits-with-strava/).
+A quick experiment to figure out how many times I've summited [a small local mountain](https://en.wikipedia.org/wiki/Brocken) given my [Strava](https://strava.com) activities. [More details here](https://arthurhammer.de/2019/06/counting-mountain-summits-with-strava/).
 
 [ ![Screenshot](screenshot.jpg) ](screenshot.jpg)
 
